@@ -1,36 +1,35 @@
-trigger:
-- main
+name: CI Pipeline
  
-pool:
-  vmImage: ubuntu-latest
+on:
+  push:
+    branches: [ main ]
  
-stages:
-- stage: Build
-  jobs:
-  - job: BuildJob
+jobs:
+  build:
+    runs-on: ubuntu-latest
     steps:
-    - script: |
-        echo "Building project 🚀"
-        echo "Hello Rithwik from Build stage" > output.txt
-        cat output.txt
-      displayName: Build + create file
+      - uses: actions/checkout@v4
  
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathToPublish: 'output.txt'
-        artifactName: 'build-artifact'
-      displayName: Publish artifact
+      - name: Build
+        run: |
+          echo "Building 🚀"
+          echo "Hello from GitHub Actions" > output.txt
+          cat output.txt
  
-- stage: Test
-  jobs:
-  - job: TestJob
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: output.txt
+ 
+  test:
+    runs-on: ubuntu-latest
+    needs: build
     steps:
-    - script: echo "Running tests ✅"
-      displayName: Test stage
+      - run: echo "Testing ✅"
  
-- stage: Deploy
-  jobs:
-  - job: DeployJob
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
     steps:
-    - script: echo "Deploying app 🚀"
-      displayName: Deploy stage
+      - run: echo "Deploying 🚀"
