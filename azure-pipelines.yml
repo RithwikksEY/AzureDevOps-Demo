@@ -4,21 +4,22 @@ trigger:
 pool:
   vmImage: ubuntu-latest
  
-steps:
-- script: |
-    echo "Starting pipeline 🚀"
-    echo "Listing files:"
-    ls -la
-  displayName: 'Check repo files'
+stages:
+- stage: Build
+  jobs:
+  - job: BuildJob
+    steps:
+    - script: echo "Building project 🚀"
  
-- script: |
-    echo "Creating a test file"
-    echo "Hello Rithwik DevOps" > test.txt
-    cat test.txt
-  displayName: 'Create & read file'
+- stage: Test
+  jobs:
+  - job: TestJob
+    steps:
+    - script: echo "Running tests ✅"
  
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathToPublish: 'test.txt'
-    artifactName: 'sample-artifact'
-  displayName: 'Publish artifact'
+- stage: Deploy
+  jobs:
+  - job: DeployJob
+    steps:
+    - script: echo "Deploying app 🚀"
+ 
