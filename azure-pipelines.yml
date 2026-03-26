@@ -9,17 +9,29 @@ stages:
   jobs:
   - job: BuildJob
     steps:
-    - script: echo "Building project 🚀"
+    - script: |
+        echo "Building project 🚀"
+        echo "Hello Rithwik from Build stage" > output.txt
+        cat output.txt
+      displayName: Build + create file
+ 
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: 'output.txt'
+        artifactName: 'build-artifact'
+      displayName: Publish artifact
  
 - stage: Test
   jobs:
   - job: TestJob
     steps:
     - script: echo "Running tests ✅"
+      displayName: Test stage
  
 - stage: Deploy
   jobs:
   - job: DeployJob
     steps:
     - script: echo "Deploying app 🚀"
+      displayName: Deploy stage
  
