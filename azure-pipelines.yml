@@ -5,5 +5,20 @@ pool:
   vmImage: ubuntu-latest
  
 steps:
-- script: echo "Pipeline working 🚀"
-  displayName: Run test
+- script: |
+    echo "Starting pipeline 🚀"
+    echo "Listing files:"
+    ls -la
+  displayName: 'Check repo files'
+ 
+- script: |
+    echo "Creating a test file"
+    echo "Hello Rithwik DevOps" > test.txt
+    cat test.txt
+  displayName: 'Create & read file'
+ 
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: 'test.txt'
+    artifactName: 'sample-artifact'
+  displayName: 'Publish artifact'
