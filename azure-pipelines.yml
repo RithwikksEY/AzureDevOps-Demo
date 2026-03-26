@@ -4,34 +4,42 @@ trigger:
 pool:
   vmImage: ubuntu-latest
  
+variables:
+  myName: Rithwik
+ 
 stages:
 - stage: Build
   jobs:
   - job: BuildJob
     steps:
     - script: |
-        echo "Building project 🚀"
-        echo "Hello Rithwik from Build stage" > output.txt
-        cat output.txt
-      displayName: Build + create file
+        echo "Build started 🚀"
+        echo "User: $(whoami)"
+        echo "Date: $(date)"
+        echo "Hello $(myName)" > report.txt
+        cat report.txt
+      displayName: Build + System Info
  
     - task: PublishBuildArtifacts@1
       inputs:
-        pathToPublish: 'output.txt'
-        artifactName: 'build-artifact'
-      displayName: Publish artifact
+        pathToPublish: 'report.txt'
+        artifactName: 'build-report'
+      displayName: Publish Artifact
  
 - stage: Test
   jobs:
   - job: TestJob
     steps:
-    - script: echo "Running tests ✅"
-      displayName: Test stage
+    - script: |
+        echo "Running tests ✅"
+        echo "Simulating test..."
+      displayName: Test Stage
  
 - stage: Deploy
   jobs:
   - job: DeployJob
     steps:
-    - script: echo "Deploying app 🚀"
-      displayName: Deploy stage
- 
+    - script: |
+        echo "Deploying 🚀"
+        echo "Pipeline ID: $(Build.BuildId)"
+      displayName: Deploy Stage
